@@ -1,0 +1,7 @@
+
+.table-wrapper-scroll-y {
+    position: relative;
+    height: 110px;
+    overflow: auto;
+    display: block;
+}
