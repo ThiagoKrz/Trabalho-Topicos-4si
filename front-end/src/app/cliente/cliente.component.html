@@ -1,0 +1,199 @@
+<div class= "container border" > 
+    <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Adicionar Cliente</a>
+
+    <hr>
+    <table class= "table table-bordered table-striped" > 
+      <thead> 
+      <tr> 
+        <th>#</th> 
+        <th>Nome Fantasia</th> 
+        <th>Sobrenome | Razão social</th> 
+        <th>RG | IE</th> 
+        <th>CPF | CNPJ</th> 
+        <th>Dt.Nascimento | Dt.Abertura</th> 
+        <th>Ações</th> 
+      </tr> 
+      </thead> 
+      <tbody> 
+      <tr  *ngFor= "let cliente of clientes" > 
+        <td><span>{{cliente.id}}</span></td>
+        <td><span>{{cliente.nome_nomeFantasia}}</span></td>
+        <td><span>{{cliente.sobrenome_RazaoSocial}}</span></td>
+        <td><span>{{cliente.RG_IE}}</span></td>
+        <td><span>{{cliente.CPF_CNPJ}}</span></td>
+        <td><span>{{cliente.DataNascimento_DataAbertura}}</span></td>
+        <td>
+          <!-- <a class="btn btn-info mx-1" href="#" role="button">Detalhes</a> -->
+          <a class="btn btn-warning mx-1" href="#" role="button">Editar</a>
+          <a class="btn btn-danger mx-1" href="#" role="button" (click)="onRemoveCliente(cliente.id)">Remover</a>
+        </td>
+      </tr> 
+      </tbody> 
+    </table> 
+  </div>
+
+
+  <ng-template #content let-modal>
+
+    <!-- <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Adicionar Cliente</h4>
+    </div> -->
+
+    <div class="modal-body p-4">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+
+        <li ngbNavItem clas>
+          <a ngbNavLink>Informações Pessoais</a>
+          <ng-template ngbNavContent>
+            
+            <form class="pt-3" #fCliente="ngForm" (ngSubmit)="onSubmit(fCliente.value)" novalidate>
+
+              <div class="row">
+                <div class="col-md-2 mb-2">
+                  <label for="formIdEndereco" class="form-label">Id</label>
+                  <input id="formIdEndereco" name="formIdEndereco" class="form-control" ngModel disabled>
+                </div>
+                <div class="col-md-10 mb-2">
+                  <label for="nome" class="form-label">Nome</label>
+                  <input mask="S*" id="nome" name="nome" class="form-control" ngModel>
+                </div>
+              </div>
+
+                <div class="form-group">
+                  <label for="sobrenome">Sobrenome</label>
+                  <div class="input-group mb-2">
+                    <input mask="S*" id="sobrenome" name="sobrenome" class="form-control" ngModel>
+                  </div>
+                </div>
+
+                <div class="row form-group">
+                  <div class="col mb-2">
+                    <label for="rg" class="form-label">RG</label>
+                    <input mask="00.000.000-0" id="rg" name="rg" class="form-control" ngModel>
+                  </div>
+
+                  <div class="col mb-2">
+                    <label for="cpf" class="form-label">CPF</label>
+                    <input mask="000.000.000-00"id="cpf" name="cpf" class="form-control" ngModel>
+                  </div>
+                </div>
+      
+                <div class="row form-group">
+                  <div class="col-md-5 mb-2">
+                    <label for="DataNascimento" class="form-label">Data de Nascimento</label>
+                    <input type="date" id="DataNascimento" name="DataNascimento" class="form-control" ngModel>
+                  </div>
+                </div>
+              <div class="modal-footer mt-4">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.dismiss('Cross click')">Cancelar</button>
+                <button type="submit" class="btn btn-success" >Salvar</button>
+              </div>
+            </form>
+          </ng-template>
+        </li>
+
+
+        <li ngbNavItem>
+          <a ngbNavLink>Endereços</a>
+          <ng-template #contentEndereco ngbNavContent>
+            
+             <form class="pt-3" #fEndereco="ngForm" (ngSubmit)="onAddEndereco(fEndereco.value); fEndereco.resetForm()" novalidate>
+              <div class="form-group">
+
+                <div class="row">
+                  <div class="col-md-2 mb-2">
+                    <label for="idEndereco" class="form-label">Id</label>
+                    <input id="idEndereco" name="idEndereco" class="form-control" ngModel disabled>
+                  </div>
+
+                  <div class="col-md-10 mb-2">
+                    <label for="tituloEndereco" class="form-label">Titulo</label>
+                    <input id="tituloEndereco" name="tituloEndereco" class="form-control" ngModel>
+                  </div>
+                </div>
+               
+                <div class="row">
+                  <div class="col mb-2">
+                    <label for="cepEndereco" class="form-label">CEP</label>
+                    <input mask="00000-000" id="cepEndereco" name="cepEndereco" class="form-control" ngModel>
+                  </div>
+
+                  <div class="col mb-2">
+                    <label for="ibgeEndereco" class="form-label">IBGE</label>
+                    <input mask="0000000" id="ibgeEndereco" name="ibgeEndereco" class="form-control" ngModel>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-2 mb-2">
+                    <label for="ufEndereco" class="form-label">UF</label>
+                    <input mask="UU" id="ufEndereco" name="ufEndereco" class="form-control" ngModel>
+                  </div>
+                  
+                  <div class="col mb-2">
+                    <label for="cidadeEndereco" class="form-label">Cidade</label>
+                    <input mask="S*" id="cidadeEndereco" name="cidadeEndereco" class="form-control" ngModel>
+                  </div>
+
+                  <div class="col-md-2 mb-2">
+                    <label for="numeroEndereco" class="form-label">Número</label>
+                    <input mask="0*" id="numeroEndereco" name="numeroEndereco" class="form-control" ngModel>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col mb-2">
+                  <label for="logradouroEndereco" class="form-label">Logradouro </label>
+                  <input id="logradouroEndereco" name="logradouroEndereco" class="form-control" ngModel>
+                </div>
+      
+                <div class="col mb-2">
+                  <label for="bairroEndereco" class="form-label">Bairro</label>
+                  <input id="bairroEndereco" name="bairroEndereco" class="form-control" ngModel>
+                </div>
+                </div>
+                
+                <div >
+                  <button type="submit" class="btn btn-primary mt-2 ">Adicionar Endereço</button>
+                </div>
+              </div>
+            </form>
+
+            <hr>
+            
+            <div class="table-wrapper-scroll-y">
+              <table class= "table" > 
+                <thead> 
+                <tr> 
+                  <!-- <th>#</th>  -->
+                  <th>#</th> 
+                  <th>Titulo</th> 
+                  <th>Cidade</th>
+                  <th>UF</th> 
+                  <th>Ações</th> 
+                </tr> 
+                </thead> 
+                <tbody> 
+                <tr> 
+                <tr  *ngFor= "let endereco of enderecosForm" > 
+                  <td><span>{{endereco.idForm}}</span></td>
+                  <td><span>{{endereco.titulo}}</span></td>
+                  <td><span>{{endereco.cidade}}</span></td>
+                  <td><span>{{endereco.UF}}</span></td>
+                  <td class="col-md-3">
+                    <a class="btn btn-sm btn-warning mx-1" href="#" role="button" (click)="onEditEndereco(contentEndereco, endereco.idForm)">Editar</a>
+                    <a class="btn btn-sm btn-danger mx-1" href="#" role="button" (click)="onRemoveEndereco(endereco.idForm); fEndereco.resetForm()">Remover</a>
+                  </td>
+                </tr> 
+                </tbody> 
+              </table> 
+            </div>
+
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav"></div>
+      
+    </div>
+   
+  </ng-template>
