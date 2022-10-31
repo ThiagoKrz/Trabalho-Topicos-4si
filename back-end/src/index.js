@@ -1,5 +1,8 @@
 import express from "express"
 import connection from "./config/database.js"
+import EnderecoModel from "./enderece/EnderecoModel.js"
+import ClienteModel from "./enderece/clienteModel.js"
+
 
 const app = express()
 connection.authenticate().then(()=>{
