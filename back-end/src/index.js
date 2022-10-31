@@ -1,7 +1,6 @@
 import express from "express"
 import connection from "./config/database.js"
-import EnderecoModel from "./enderece/EnderecoModel.js"
-import ClienteModel from "./enderece/clienteModel.js"
+import ClienteRouter from "./cliente/clienteControler.js"
 
 
 const app = express()
@@ -15,6 +14,6 @@ app.use(express.urlencoded({
     extended: false
 }))
 app.use(express.json())
-
+app.use("/cliente",ClienteRouter)
 app.listen(4200,()=>{console.log("Servidor iniciado.")})
 

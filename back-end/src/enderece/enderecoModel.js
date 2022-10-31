@@ -8,11 +8,9 @@ const EnderecoModel = connection.define("Endereço",{
     ibge:{type:sequelize.STRING,allowNull:false},
     uf:{type:sequelize.STRING,allowNull:false},
     cidade:{type:sequelize.STRING,allowNull:false},
-    lagradoro:{type:sequelize.STRING,allowNull:false},
+    logradouro:{type:sequelize.STRING,allowNull:false},
     bairro:{type:sequelize.STRING,allowNull:false},
     numero:{type:sequelize.INTEGER,allowNull:false},
-
-
 })
 // EnderecoModel.sync({
 //     force:true

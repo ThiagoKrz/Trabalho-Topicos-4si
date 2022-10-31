@@ -1,6 +1,6 @@
 import connection from "../config/database.js"
 import sequelize from "sequelize"
-import EnderecoModel from "./EnderecoModel.js"
+import EnderecoModel from "../enderece/EnderecoModel.js"
 
 const ClienteModel = connection.define("Cliente",{
 
@@ -13,8 +13,9 @@ const ClienteModel = connection.define("Cliente",{
 
 })
 
-EnderecoModel.belongsTo(ClienteModel)
-ClienteModel.hasMany(EnderecoModel)
+
+ClienteModel.belongsTo(EnderecoModel)
+EnderecoModel.hasMany(ClienteModel)
 // ClienteModel.sync({
 //     force:true
 // })
