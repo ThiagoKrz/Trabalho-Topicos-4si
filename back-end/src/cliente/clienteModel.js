@@ -6,15 +6,22 @@ const ClienteModel = connection.define("Cliente", {
   nome_nomefantasia: { type: sequelize.STRING, allowNull: false },
   sobrenome_razaosocial: { type: sequelize.STRING, allowNull: false },
   rg_ie: { type: sequelize.STRING, allowNull: false },
-  cpf: { type: sequelize.STRING, allowNull: false },
-  cnpj: { type: sequelize.STRING, allowNull: false },
+  cpf_cnpj: { type: sequelize.STRING, allowNull: false },
   datanascimento_dataabertura: { type: sequelize.STRING, allowNull: false },
 });
 
-ClienteModel.hasMany(EnderecoModel, { foreignKey: { name: "cliente_id" } });
-EnderecoModel.belongsTo(ClienteModel, { foreignKey: { name: "cliente_id" } });
+ClienteModel.hasMany(EnderecoModel, {
+  foreignKey: { name: "cliente_id" },
+  as: "enderecos",
+  onDelete: "cascade",
+});
 
-ClienteModel.sync({ force: true });
-EnderecoModel.sync({ force: true });
+EnderecoModel.belongsTo(ClienteModel, {
+  foreignKey: { name: "cliente_id" },
+  as: "cliente",
+});
+
+// ClienteModel.sync({ force: true });
+// EnderecoModel.sync({ force: true });
 
 export default ClienteModel;
