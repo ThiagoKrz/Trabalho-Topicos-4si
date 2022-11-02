@@ -1,6 +1,6 @@
 import express from "express"
 import ClienteModel from "./clienteModel.js"
-import EnderecoModel from "../enderece/enderecoModel.js"
+import EnderecoModel from "../endereco/enderecoModel.js"
 
 const router = express.Router()
 
