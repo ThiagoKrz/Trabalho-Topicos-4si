@@ -14,6 +14,7 @@ ClienteModel.hasMany(EnderecoModel, {
   foreignKey: { name: "cliente_id" },
   as: "enderecos",
   onDelete: "cascade",
+  onUpdate: "cascade",
 });
 
 EnderecoModel.belongsTo(ClienteModel, {

@@ -10,6 +10,7 @@ const EnderecoModel = connection.define("Endereco", {
   logradouro: { type: sequelize.STRING, allowNull: false },
   bairro: { type: sequelize.STRING, allowNull: false },
   numero: { type: sequelize.INTEGER, allowNull: false },
+  cliente_id: { type: sequelize.INTEGER, allowNull: false },
 });
 
 export default EnderecoModel;
