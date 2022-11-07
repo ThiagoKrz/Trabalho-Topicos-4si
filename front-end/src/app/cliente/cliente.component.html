@@ -16,15 +16,15 @@
       </thead> 
       <tbody> 
       <tr  *ngFor= "let cliente of clientes" > 
-        <td><span>{{cliente.id}}</span></td>
-        <td><span>{{cliente.nome_nomeFantasia}}</span></td>
-        <td><span>{{cliente.sobrenome_RazaoSocial}}</span></td>
-        <td><span>{{cliente.RG_IE}}</span></td>
-        <td><span>{{cliente.CPF_CNPJ}}</span></td>
-        <td><span>{{cliente.DataNascimento_DataAbertura}}</span></td>
+        <td ><span>{{cliente.id}}</span></td>
+        <td><span>{{cliente.nome_nomefantasia}}</span></td>
+        <td><span>{{cliente.sobrenome_razaosocial}}</span></td>
+        <td><span>{{cliente.rg_ie}}</span></td>
+        <td ><span>{{cliente.cpf_cnpj}}</span></td>
+        <td><span>{{cliente.datanascimento_dataabertura}}</span></td>
         <td>
           <!-- <a class="btn btn-info mx-1" href="#" role="button">Detalhes</a> -->
-          <a class="btn btn-warning mx-1" href="#" role="button">Editar</a>
+          <a class="btn btn-warning mx-1" href="#" role="button" (click)="onEditCliente(content, cliente.id)">Editar</a>
           <a class="btn btn-danger mx-1" href="#" role="button" (click)="onRemoveCliente(cliente.id)">Remover</a>
         </td>
       </tr> 
@@ -40,64 +40,64 @@
     </div> -->
 
     <div class="modal-body p-4">
-      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs" [destroyOnHide]="false">
 
-        <li ngbNavItem clas>
+        <li ngbNavItem [destroyOnHide]="false">
           <a ngbNavLink>Informações Pessoais</a>
           <ng-template ngbNavContent>
             
-            <form class="pt-3" #fCliente="ngForm" (ngSubmit)="onSubmit(fCliente.value)" novalidate>
+            <form name="clientForm" class="pt-3" #fCliente="ngForm" (ngSubmit)="onSubmit(fCliente.value)">
 
               <div class="row">
                 <div class="col-md-2 mb-2">
-                  <label for="formIdEndereco" class="form-label">Id</label>
-                  <input id="formIdEndereco" name="formIdEndereco" class="form-control" ngModel disabled>
+                  <label for="formIdCliente" class="form-label">Id</label>
+                  <input id="formIdCliente" name="formIdCliente" class="form-control" ngModel disabled>
                 </div>
                 <div class="col-md-10 mb-2">
-                  <label for="nome" class="form-label">Nome</label>
-                  <input mask="S*" id="nome" name="nome" class="form-control" ngModel>
+                  <label for="formNomeCliente" class="form-label">Nome</label>
+                  <input id="formNomeCliente" name="formNomeCliente" class="form-control" ngModel required>
                 </div>
               </div>
 
                 <div class="form-group">
-                  <label for="sobrenome">Sobrenome</label>
+                  <label for="formSobrenomeCliente">Sobrenome</label>
                   <div class="input-group mb-2">
-                    <input mask="S*" id="sobrenome" name="sobrenome" class="form-control" ngModel>
+                    <input id="formSobrenomeCliente" name="formSobrenomeCliente" class="form-control" ngModel required>
                   </div>
                 </div>
 
                 <div class="row form-group">
                   <div class="col mb-2">
-                    <label for="rg" class="form-label">RG</label>
-                    <input mask="00.000.000-0" id="rg" name="rg" class="form-control" ngModel>
+                    <label for="formRgCliente" class="form-label">RG</label>
+                    <input mask="00.000.000-0" id="formRgCliente" name="formRgCliente" class="form-control" ngModel required>
                   </div>
 
                   <div class="col mb-2">
-                    <label for="cpf" class="form-label">CPF</label>
-                    <input mask="000.000.000-00"id="cpf" name="cpf" class="form-control" ngModel>
+                    <label for="formCpfCliente" class="form-label">CPF</label>
+                    <input mask="000.000.000-00"id="formCpfCliente" name="formCpfCliente" class="form-control" ngModel required>
                   </div>
                 </div>
       
                 <div class="row form-group">
                   <div class="col-md-5 mb-2">
-                    <label for="DataNascimento" class="form-label">Data de Nascimento</label>
-                    <input type="date" id="DataNascimento" name="DataNascimento" class="form-control" ngModel>
+                    <label for="formDataCliente" class="form-label">Data de Nascimento</label>
+                    <input type="date" id="formDataCliente" name="formDataCliente" class="form-control" ngModel required>
                   </div>
                 </div>
               <div class="modal-footer mt-4">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.dismiss('Cross click')">Cancelar</button>
-                <button type="submit" class="btn btn-success" >Salvar</button>
+                <button type="submit" class="btn btn-success" ng-disabled="clientForm.$invalid">Salvar</button>
               </div>
             </form>
           </ng-template>
         </li>
 
 
-        <li ngbNavItem>
+        <li ngbNavItem [destroyOnHide]="false">
           <a ngbNavLink>Endereços</a>
           <ng-template #contentEndereco ngbNavContent>
             
-             <form class="pt-3" #fEndereco="ngForm" (ngSubmit)="onAddEndereco(fEndereco.value); fEndereco.resetForm()" novalidate>
+             <form class="pt-3" #fEndereco="ngForm" (ngSubmit)="onAddEndereco(fEndereco.value); fEndereco.resetForm()">
               <div class="form-group">
 
                 <div class="row">
@@ -108,48 +108,48 @@
 
                   <div class="col-md-10 mb-2">
                     <label for="tituloEndereco" class="form-label">Titulo</label>
-                    <input id="tituloEndereco" name="tituloEndereco" class="form-control" ngModel>
+                    <input id="tituloEndereco" name="tituloEndereco" class="form-control" ngModel required>
                   </div>
                 </div>
                
                 <div class="row">
                   <div class="col mb-2">
                     <label for="cepEndereco" class="form-label">CEP</label>
-                    <input mask="00000-000" id="cepEndereco" name="cepEndereco" class="form-control" ngModel>
+                    <input mask="00000-000" id="cepEndereco" name="cepEndereco" class="form-control" ngModel required>
                   </div>
 
                   <div class="col mb-2">
                     <label for="ibgeEndereco" class="form-label">IBGE</label>
-                    <input mask="0000000" id="ibgeEndereco" name="ibgeEndereco" class="form-control" ngModel>
+                    <input mask="0000000" id="ibgeEndereco" name="ibgeEndereco" class="form-control" ngModel required>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-2 mb-2">
                     <label for="ufEndereco" class="form-label">UF</label>
-                    <input mask="UU" id="ufEndereco" name="ufEndereco" class="form-control" ngModel>
+                    <input mask="UU" id="ufEndereco" name="ufEndereco" class="form-control" ngModel required>
                   </div>
                   
                   <div class="col mb-2">
                     <label for="cidadeEndereco" class="form-label">Cidade</label>
-                    <input mask="S*" id="cidadeEndereco" name="cidadeEndereco" class="form-control" ngModel>
+                    <input id="cidadeEndereco" name="cidadeEndereco" class="form-control" ngModel required>
                   </div>
 
                   <div class="col-md-2 mb-2">
                     <label for="numeroEndereco" class="form-label">Número</label>
-                    <input mask="0*" id="numeroEndereco" name="numeroEndereco" class="form-control" ngModel>
+                    <input mask="0*" id="numeroEndereco" name="numeroEndereco" class="form-control" ngModel required>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col mb-2">
                   <label for="logradouroEndereco" class="form-label">Logradouro </label>
-                  <input id="logradouroEndereco" name="logradouroEndereco" class="form-control" ngModel>
+                  <input id="logradouroEndereco" name="logradouroEndereco" class="form-control" ngModel required>
                 </div>
       
                 <div class="col mb-2">
                   <label for="bairroEndereco" class="form-label">Bairro</label>
-                  <input id="bairroEndereco" name="bairroEndereco" class="form-control" ngModel>
+                  <input id="bairroEndereco" name="bairroEndereco" class="form-control" ngModel required>
                 </div>
                 </div>
                 
@@ -175,14 +175,14 @@
                 </thead> 
                 <tbody> 
                 <tr> 
-                <tr  *ngFor= "let endereco of enderecosForm" > 
-                  <td><span>{{endereco.idForm}}</span></td>
-                  <td><span>{{endereco.titulo}}</span></td>
-                  <td><span>{{endereco.cidade}}</span></td>
-                  <td><span>{{endereco.UF}}</span></td>
+                <tr  *ngFor= "let form of enderecosForm" > 
+                  <td><span>{{form.idForm}}</span></td>
+                  <td><span>{{form.endereco.titulo}}</span></td>
+                  <td><span>{{form.endereco.cidade}}</span></td>
+                  <td><span>{{form.endereco.uf}}</span></td>
                   <td class="col-md-3">
-                    <a class="btn btn-sm btn-warning mx-1" href="#" role="button" (click)="onEditEndereco(contentEndereco, endereco.idForm)">Editar</a>
-                    <a class="btn btn-sm btn-danger mx-1" href="#" role="button" (click)="onRemoveEndereco(endereco.idForm); fEndereco.resetForm()">Remover</a>
+                    <!-- <a class="btn btn-sm btn-warning mx-1" href="#" role="button" (click)="onEditEndereco(contentEndereco, form.idForm)">Editar</a> -->
+                    <a class="btn btn-sm btn-danger mx-1" href="#" role="button" (click)="onRemoveEndereco(form.idForm); fEndereco.resetForm()">Remover</a>
                   </td>
                 </tr> 
                 </tbody> 

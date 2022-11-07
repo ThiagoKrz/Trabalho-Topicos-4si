@@ -1,40 +1,38 @@
-export class EnderecoForm {
+export class EnderecoDto {
     constructor(
-        private _idForm: number,
         private _titulo: string,
-        private _CEP: string,
-        private _IBGE: number,
-        private _UF: string,
+        private _cep: string,
+        private _ibge: number,
+        private _uf: string,
         private _cidade: string,
         private _logradouro: string,
         private _bairro: string,
-        private _numero: string,
-        private _isNovo: boolean = false,
+        private _numero: number,
         private _id?: number
     ) { }
 
-    public get UF(): string {
-        return this._UF;
+    public get uf(): string {
+        return this._uf;
     }
-    public set UF(value: string) {
-        this._UF = value;
+    public set uf(value: string) {
+        this._uf = value;
     }
-    public get IBGE(): number {
-        return this._IBGE;
+    public get ibge(): number {
+        return this._ibge;
     }
-    public set IBGE(value: number) {
-        this._IBGE = value;
+    public set ibge(value: number) {
+        this._ibge = value;
     }
-    public get CEP(): string {
-        return this._CEP;
+    public get cep(): string {
+        return this._cep;
     }
-    public set CEP(value: string) {
-        this._CEP = value;
+    public set cep(value: string) {
+        this._cep = value;
     }
-    public get numero(): string {
+    public get numero(): number {
         return this._numero;
     }
-    public set numero(value: string) {
+    public set numero(value: number) {
         this._numero = value;
     }
     public get bairro(): string {
@@ -66,19 +64,5 @@ export class EnderecoForm {
     }
     public set id(value: number | undefined) {
         this._id = value;
-    }
-
-    public get idForm(): number {
-        return this._idForm;
-    }
-    public set idForm(value: number) {
-        this._idForm = value;
-    }
-
-    public get isNovo(): boolean {
-        return this._isNovo;
-    }
-    public set isNovo(value: boolean) {
-        this._isNovo = value;
     }
 }

@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GlobalConstants } from '../commons/global-constants';
-import { Cliente } from './dto/cliente';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EnderecoForm } from './dto/enderecoForm';
+import { ClienteDto } from './dto/clienteDto';
+import { EnderecoDto } from './dto/enderecoDto';
+import { ResponseHttp } from './vo/responseHttp';
+import { FormEndereco } from './vo/FormEndereco';
 
 @Component({
   selector: 'app-customer',
@@ -11,20 +13,16 @@ import { EnderecoForm } from './dto/enderecoForm';
   styleUrls: ['./cliente.component.css']
 })
 export class ClienteComponent implements OnInit {
-  enderecosForm: EnderecoForm[] = [];
-  clienteForm?: Cliente;
+  enderecosForm: FormEndereco[] = [];
+  clienteForm?: ClienteDto | null;
 
-  clientes: Cliente[] = [
-    new Cliente(1, "PicPay", "PicPay", "21313131", "3242434232423", "01/06/2001"),
-    new Cliente(2, "Itau", "Itau", "21313131", "3242434232423", "01/06/2001"),
-    new Cliente(3, "Bradesco", "Bradesco", "21313131", "3242434232423", "01/06/2001"),
-  ];
-
+  clientes: ClienteDto[] = [];
   closeResult: string = "";
 
   constructor(private http: HttpClient, private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.getAll();
   }
 
 
@@ -41,12 +39,15 @@ export class ClienteComponent implements OnInit {
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       this.enderecosForm = [];
+      this.clienteForm = null;
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       this.enderecosForm = [];
+      this.clienteForm = null;
       return 'by clicking on a backdrop';
     } else {
       this.enderecosForm = [];
+      this.clienteForm = null;
       return `with: ${reason}`;
     }
   }
@@ -54,18 +55,53 @@ export class ClienteComponent implements OnInit {
 
   //FORM CLIENTE
   onSubmit(f: any) {
-    console.log(f);
-    // this.modalService.dismissAll(); //dismiss the modal
-  }
 
+    const idCliente = (this.clienteForm) ? this.clienteForm.id : -1;
+
+    const newCliente = new ClienteDto(
+      idCliente,
+      f.formNomeCliente,
+      f.formSobrenomeCliente,
+      f.formRgCliente,
+      f.formCpfCliente,
+      f.formDataCliente,
+      this.enderecosForm.map(e => e.endereco)
+    );
+
+    if (newCliente.id == -1) {
+
+      this.http.post(GlobalConstants.apiURL + "/cliente", newCliente, { observe: 'response' }).subscribe(response => {
+        const responseBody = response.body as ResponseHttp;
+        this.getAll();
+        this.modalService.dismissAll();
+      }, (responseError) => {
+        console.log(responseError.error.message);
+      })
+
+    } else {
+      const updateCliente = ClienteDto.createClienteToUpdate(newCliente, this.clienteForm!);
+
+      this.http.patch(GlobalConstants.apiURL + "/cliente/" + newCliente.id, updateCliente, { observe: 'response' }).subscribe(response => {
+        const responseBody = response.body as ResponseHttp;
+        this.getAll();
+        this.modalService.dismissAll();
+      }, (responseError) => {
+        console.log(responseError.error.message);
+      })
+
+      this.getAll();
+    }
+
+
+  }
 
 
   // FORM ENDERECO
   onAddEndereco(f: any) {
     const idForm: number = this.enderecosForm.length > 0 ? this.enderecosForm[this.enderecosForm.length - 1].idForm + 1 : 1;
+    const idCliente = (this.clienteForm) ? this.clienteForm.id : -1;
 
-    const novoEndereco = new EnderecoForm(
-      idForm,
+    const newEndereco = new EnderecoDto(
       f.tituloEndereco,
       f.cepEndereco,
       f.ibgeEndereco,
@@ -73,65 +109,82 @@ export class ClienteComponent implements OnInit {
       f.cidadeEndereco,
       f.logradouroEndereco,
       f.bairroEndereco,
-      f.numeroEndereco,
-      true,
-      f.idEndereco
+      f.numeroEndereco
     );
 
-    console.log(novoEndereco);
-    this.enderecosForm.push(novoEndereco);
+    if (idCliente != -1) {
+      this.http.post(GlobalConstants.apiURL + "/cliente/" + idCliente + "/endereco", newEndereco, { observe: 'response' }).subscribe(response => {
+        const responseBody = response.body as ResponseHttp;
+        this.getAllEnderecos(idCliente);
+      }, (responseError) => {
+        console.log(responseError.error.message);
+      })
+
+    } else {
+      this.enderecosForm.push(new FormEndereco(idForm, newEndereco));
+    }
   }
 
   onRemoveEndereco(idForm: number) {
-    const endereco: EnderecoForm | undefined = this.enderecosForm.find(end => end.idForm = idForm);
-    let index;
-    if (endereco) {
-      index = this.enderecosForm.indexOf(endereco)
+    const enderecoForm: FormEndereco | undefined = this.enderecosForm.find((f) => f.idForm == idForm);
+    if (enderecoForm) {
+      const index = this.enderecosForm.indexOf(enderecoForm);
 
-      this.enderecosForm.splice(index, 1);
-
-      if (!endereco.isNovo)
-        console.log("REMOVIDO DO BANCO");
-
-      console.log(endereco);
+      if (enderecoForm?.endereco.id) {
+        this.http.delete(GlobalConstants.apiURL + "/cliente/endereco/" + enderecoForm.endereco.id, { observe: 'response' }).subscribe(response => {
+          this.enderecosForm.splice(index, 1);
+        }, (responseError) => {
+          console.log(responseError.error.message);
+        })
+      } else {
+        this.enderecosForm.splice(index, 1);
+      }
     }
-
-  }
-
-  onEditEndereco(targetModal: any, idForm: number) {
-    const endereco: EnderecoForm | undefined = this.enderecosForm.find(end => end.idForm = idForm);
-
-    let index;
-    if (endereco) {
-      // index = this.enderecosForm.indexOf(endereco)
-
-      (<HTMLInputElement>document.getElementById('idEndereco')).value = (endereco.id != undefined ? endereco.id.toString() : "");
-      (<HTMLInputElement>document.getElementById('tituloEndereco')).value = endereco.titulo.toString();
-      (<HTMLInputElement>document.getElementById('cepEndereco')).value = endereco.CEP.toString();
-      (<HTMLInputElement>document.getElementById('ibgeEndereco')).value = endereco.IBGE.toString();
-      (<HTMLInputElement>document.getElementById('ufEndereco')).value = endereco.UF.toString();
-      (<HTMLInputElement>document.getElementById('cidadeEndereco')).value = endereco.cidade.toString();
-      (<HTMLInputElement>document.getElementById('numeroEndereco')).value = endereco.numero.toString();
-      (<HTMLInputElement>document.getElementById('logradouroEndereco')).value = endereco.logradouro.toString();
-      (<HTMLInputElement>document.getElementById('bairroEndereco')).value = endereco.bairro.toString();
-
-      if (!endereco.isNovo)
-        console.log("REMOVIDO DO BANCO");
-
-      console.log(endereco);
-    }
-
   }
 
 
   //TABELA CLIENTE
-  onRemoveCliente (id: number) {
-    const cliente = this.clientes.find(c => c.id = id);
-    let index;
-    if (cliente) {
-      index = this.clientes.indexOf(cliente)
-      this.clientes.splice(index, 1);
-    }
-    
+  onRemoveCliente(id: number) {
+    this.http.delete(GlobalConstants.apiURL + "/cliente/" + id, { observe: 'response' }).subscribe(response => {
+      this.getAll();
+    }, (responseError) => {
+      console.log(responseError.error.message);
+    })
   }
+
+  async onEditCliente(content: any, id: number) {
+    this.open(content)
+    const response = await this.http.get<ClienteDto>(GlobalConstants.apiURL + "/cliente/" + id).toPromise();
+
+    if (response) {
+      this.clienteForm = response;
+      let idForm: number = 1;
+      this.enderecosForm = this.clienteForm.enderecos.map(e => new FormEndereco(idForm++, e));
+
+
+      (<HTMLInputElement>document.getElementById('formIdCliente')).value = this.clienteForm.id.toString();
+      (<HTMLInputElement>document.getElementById('formNomeCliente')).value = this.clienteForm.nome_nomefantasia;
+      (<HTMLInputElement>document.getElementById('formSobrenomeCliente')).value = this.clienteForm.sobrenome_razaosocial;
+      (<HTMLInputElement>document.getElementById('formRgCliente')).value = this.clienteForm.rg_ie;
+      (<HTMLInputElement>document.getElementById('formCpfCliente')).value = this.clienteForm.cpf_cnpj;
+      (<HTMLInputElement>document.getElementById('formDataCliente')).value = this.clienteForm.datanascimento_dataabertura.toString();
+    }
+
+  }
+
+  getAll() {
+    this.http.get<ClienteDto[]>(GlobalConstants.apiURL + "/cliente").subscribe(data => {
+      this.clientes = data;
+    })
+  }
+
+  getAllEnderecos(id: number) {
+    this.http.get<EnderecoDto[]>(GlobalConstants.apiURL + "/cliente/" + id + "/endereco").subscribe(data => {
+      this.enderecosForm = data.map(e => new FormEndereco(e.id!, e));
+
+      console.log(this.enderecosForm);
+
+    })
+  }
+
 }
