@@ -56,7 +56,7 @@ export class ClienteComponent implements OnInit {
   //FORM CLIENTE
   onSubmit(f: any) {
 
-    const idCliente = (this.clienteForm) ? this.clienteForm.id : -1;
+  const idCliente = (this.clienteForm) ? this.clienteForm.id : -1;
 
     const newCliente = new ClienteDto(
       idCliente,
@@ -67,6 +67,7 @@ export class ClienteComponent implements OnInit {
       f.formDataCliente,
       this.enderecosForm.map(e => e.endereco)
     );
+
 
     if (newCliente.id == -1) {
 

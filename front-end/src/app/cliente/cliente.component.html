@@ -55,38 +55,43 @@
                 </div>
                 <div class="col-md-10 mb-2">
                   <label for="formNomeCliente" class="form-label">Nome</label>
-                  <input id="formNomeCliente" name="formNomeCliente" class="form-control" ngModel required>
+                  <input #formNomeCliente="ngModel" id="formNomeCliente" name="formNomeCliente" class="form-control" ngModel required>
+                  <div *ngIf="formNomeCliente?.errors?.['required'] " style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                 </div>
               </div>
 
-                <div class="form-group">
+                <div class="form-group mb-2">
                   <label for="formSobrenomeCliente">Sobrenome</label>
-                  <div class="input-group mb-2">
-                    <input id="formSobrenomeCliente" name="formSobrenomeCliente" class="form-control" ngModel required>
+                  <div class="input-group">
+                    <input #formSobrenomeCliente="ngModel" id="formSobrenomeCliente" name="formSobrenomeCliente" class="form-control" ngModel required>
                   </div>
+                  <div *ngIf="formSobrenomeCliente?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                 </div>
 
                 <div class="row form-group">
                   <div class="col mb-2">
                     <label for="formRgCliente" class="form-label">RG</label>
-                    <input mask="00.000.000-0" id="formRgCliente" name="formRgCliente" class="form-control" ngModel required>
+                    <input mask="00.000.000-0"  #formRgCliente="ngModel" id="formRgCliente" name="formRgCliente" class="form-control" ngModel required>
+                    <div *ngIf="formRgCliente?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
 
                   <div class="col mb-2">
                     <label for="formCpfCliente" class="form-label">CPF</label>
-                    <input mask="000.000.000-00"id="formCpfCliente" name="formCpfCliente" class="form-control" ngModel required>
+                    <input mask="000.000.000-00" #formCpfCliente="ngModel" id="formCpfCliente" name="formCpfCliente" class="form-control" ngModel required>
+                    <div *ngIf="formCpfCliente?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
                 </div>
       
                 <div class="row form-group">
                   <div class="col-md-5 mb-2">
                     <label for="formDataCliente" class="form-label">Data de Nascimento</label>
-                    <input type="date" id="formDataCliente" name="formDataCliente" class="form-control" ngModel required>
+                    <input type="date" #formDataCliente="ngModel" id="formDataCliente" name="formDataCliente" class="form-control" ngModel required>
+                    <div *ngIf="formDataCliente?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
                 </div>
               <div class="modal-footer mt-4">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.dismiss('Cross click')">Cancelar</button>
-                <button type="submit" class="btn btn-success" ng-disabled="clientForm.$invalid">Salvar</button>
+                <button type="submit" class="btn btn-success" [disabled]="!fCliente.valid">Salvar</button>
               </div>
             </form>
           </ng-template>
@@ -108,53 +113,61 @@
 
                   <div class="col-md-10 mb-2">
                     <label for="tituloEndereco" class="form-label">Titulo</label>
-                    <input id="tituloEndereco" name="tituloEndereco" class="form-control" ngModel required>
+                    <input id="tituloEndereco" #fTitulo="ngModel" name="tituloEndereco" class="form-control" ngModel required>
+                    <div [hidden]="fTitulo?.errors?.['required']" style="font-size: 11px; color: red;"> <p>Campo obrigatório.</p> </div>
                   </div>
                 </div>
                
                 <div class="row">
                   <div class="col mb-2">
                     <label for="cepEndereco" class="form-label">CEP</label>
-                    <input mask="00000-000" id="cepEndereco" name="cepEndereco" class="form-control" ngModel required>
+                    <input mask="00000-000" #fCep="ngModel" id="cepEndereco" name="cepEndereco" class="form-control" ngModel required>
+                    <div *ngIf="fCep?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
 
                   <div class="col mb-2">
                     <label for="ibgeEndereco" class="form-label">IBGE</label>
-                    <input mask="0000000" id="ibgeEndereco" name="ibgeEndereco" class="form-control" ngModel required>
+                    <input mask="0000000" #fIbge="ngModel" id="ibgeEndereco" name="ibgeEndereco" class="form-control" ngModel required>
+                    <div *ngIf="fIbge?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-2 mb-2">
                     <label for="ufEndereco" class="form-label">UF</label>
-                    <input mask="UU" id="ufEndereco" name="ufEndereco" class="form-control" ngModel required>
+                    <input mask="UU" id="ufEndereco" #fUf="ngModel" name="ufEndereco" class="form-control" ngModel required>
+                    <div *ngIf="fUf?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
                   
                   <div class="col mb-2">
                     <label for="cidadeEndereco" class="form-label">Cidade</label>
-                    <input id="cidadeEndereco" name="cidadeEndereco" class="form-control" ngModel required>
+                    <input id="cidadeEndereco" #fCidade="ngModel" name="cidadeEndereco" class="form-control" ngModel required>
+                    <div *ngIf="fCidade?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
 
                   <div class="col-md-2 mb-2">
                     <label for="numeroEndereco" class="form-label">Número</label>
-                    <input mask="0*" id="numeroEndereco" name="numeroEndereco" class="form-control" ngModel required>
+                    <input mask="0*" #fNumero="ngModel" id="numeroEndereco" name="numeroEndereco" class="form-control" ngModel required>
+                    <div *ngIf="fNumero?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col mb-2">
                   <label for="logradouroEndereco" class="form-label">Logradouro </label>
-                  <input id="logradouroEndereco" name="logradouroEndereco" class="form-control" ngModel required>
+                  <input id="logradouroEndereco" #fLogradouro="ngModel" name="logradouroEndereco" class="form-control" ngModel required>
+                  <div *ngIf="fLogradouro?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                 </div>
       
                 <div class="col mb-2">
                   <label for="bairroEndereco" class="form-label">Bairro</label>
-                  <input id="bairroEndereco" name="bairroEndereco" class="form-control" ngModel required>
+                  <input id="bairroEndereco" #fBairro="ngModel" name="bairroEndereco" class="form-control" ngModel required>
+                  <div *ngIf="fBairro?.errors?.['required']" style="font-size: 11px; color: red;"> Campo obrigatório. </div>
                 </div>
                 </div>
                 
                 <div >
-                  <button type="submit" class="btn btn-primary mt-2 ">Adicionar Endereço</button>
+                  <button type="submit" class="btn btn-primary mt-2" [disabled]="!fEndereco.valid">Adicionar Endereço</button>
                 </div>
               </div>
             </form>
