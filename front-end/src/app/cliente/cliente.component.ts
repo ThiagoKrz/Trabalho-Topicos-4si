@@ -56,7 +56,7 @@ export class ClienteComponent implements OnInit {
   //FORM CLIENTE
   onSubmit(f: any) {
 
-  const idCliente = (this.clienteForm) ? this.clienteForm.id : -1;
+    const idCliente = (this.clienteForm) ? this.clienteForm.id : -1;
 
     const newCliente = new ClienteDto(
       idCliente,
@@ -173,19 +173,57 @@ export class ClienteComponent implements OnInit {
 
   }
 
-  getAll() {
-    this.http.get<ClienteDto[]>(GlobalConstants.apiURL + "/cliente").subscribe(data => {
-      this.clientes = data;
-    })
+  async onViewCliente(content: any, id: number) {
+    this.open(content)
+    const response = await this.http.get<ClienteDto>(GlobalConstants.apiURL + "/cliente/" + id).toPromise();
+
+    if (response) {
+      this.clienteForm = response;
+      let idForm: number = 1;
+      this.enderecosForm = this.clienteForm.enderecos.map(e => new FormEndereco(idForm++, e));
+
+
+      (<HTMLInputElement>document.getElementById('formIdCliente')).value = this.clienteForm.id.toString();
+      (<HTMLInputElement>document.getElementById('formNomeCliente')).value = this.clienteForm.nome_nomefantasia;
+      (<HTMLInputElement>document.getElementById('formSobrenomeCliente')).value = this.clienteForm.sobrenome_razaosocial;
+      (<HTMLInputElement>document.getElementById('formRgCliente')).value = this.clienteForm.rg_ie;
+      (<HTMLInputElement>document.getElementById('formCpfCliente')).value = this.clienteForm.cpf_cnpj;
+      (<HTMLInputElement>document.getElementById('formDataCliente')).value = this.clienteForm.datanascimento_dataabertura.toString();
+    }
+
   }
 
-  getAllEnderecos(id: number) {
-    this.http.get<EnderecoDto[]>(GlobalConstants.apiURL + "/cliente/" + id + "/endereco").subscribe(data => {
-      this.enderecosForm = data.map(e => new FormEndereco(e.id!, e));
+  async onViewEndereco(id: number) {
 
-      console.log(this.enderecosForm);
+    const endereco: EnderecoDto | undefined = this.enderecosForm.find(e => e.idForm == id)?.endereco;
 
-    })
+    if (endereco) {
+
+      (<HTMLInputElement>document.getElementById('idEndereco')).value = endereco.id?.toString() || "";
+      (<HTMLInputElement>document.getElementById('tituloEndereco')).value = endereco.titulo || "";
+      (<HTMLInputElement>document.getElementById('cepEndereco')).value = endereco.cep || "";
+      (<HTMLInputElement>document.getElementById('ibgeEndereco')).value = endereco.ibge.toString() || "";
+      (<HTMLInputElement>document.getElementById('ufEndereco')).value = endereco.uf || "";
+      (<HTMLInputElement>document.getElementById('cidadeEndereco')).value = endereco.cidade || "";
+      (<HTMLInputElement>document.getElementById('numeroEndereco')).value = endereco.numero.toString() || "";
+      (<HTMLInputElement>document.getElementById('logradouroEndereco')).value = endereco.logradouro || "";
+      (<HTMLInputElement>document.getElementById('bairroEndereco')).value = endereco.bairro || "";
+    }
   }
+
+getAll() {
+  this.http.get<ClienteDto[]>(GlobalConstants.apiURL + "/cliente").subscribe(data => {
+    this.clientes = data;
+  })
+}
+
+getAllEnderecos(id: number) {
+  this.http.get<EnderecoDto[]>(GlobalConstants.apiURL + "/cliente/" + id + "/endereco").subscribe(data => {
+    this.enderecosForm = data.map(e => new FormEndereco(e.id!, e));
+
+    console.log(this.enderecosForm);
+
+  })
+}
 
 }
