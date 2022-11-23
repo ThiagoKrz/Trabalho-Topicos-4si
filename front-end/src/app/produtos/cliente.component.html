@@ -32,40 +32,6 @@
       </tbody> 
     </table> 
   </div>
-<div class= "container border" > 
-    <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Adicionar Produto</a>
-
-    <hr>
-    <table class= "table table-bordered table-striped" > 
-      <thead> 
-      <tr> 
-        <th>#</th> 
-        <th>Produto</th> 
-        <th>Preço</th> 
-        <th>Garantia</th> 
-        <th>Peso</th> 
-        <th>Tamanho</th> 
-        <th>Ações</th> 
-      </tr> 
-      </thead> 
-      <tbody> 
-      <tr  *ngFor= "let cliente of clientes" > 
-        <td ><span>{{cliente.id}}</span></td>
-        <td><span>{{cliente.nome_nomefantasia}}</span></td>
-        <td><span>{{cliente.sobrenome_razaosocial}}</span></td>
-        <td><span>{{cliente.rg_ie}}</span></td>
-        <td ><span>{{cliente.cpf_cnpj}}</span></td>
-        <td><span>{{cliente.datanascimento_dataabertura}}</span></td>
-        <td>
-          <!-- <a class="btn btn-info mx-1" href="#" role="button">Detalhes</a> -->
-          <a class="btn btn-warning mx-1" href="#" role="button" (click)="onEditCliente(content, cliente.id)">Editar</a>
-          <a class="btn btn-primary mx-1" href="#" role="button" (click)="onViewCliente(contentView, cliente.id)">Visualizar</a>
-          <a class="btn btn-danger mx-1" href="#" role="button" (click)="onRemoveCliente(cliente.id)">Remover</a>
-        </td>
-      </tr> 
-      </tbody> 
-    </table> 
-  </div>
 
 
   <ng-template #content let-modal>
