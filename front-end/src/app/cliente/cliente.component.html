@@ -1,16 +1,18 @@
+
+<!--Cliente-->
 <div class= "container border" > 
-    <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Adicionar Cliente</a>
+    <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Cadastrar Cliente</a>
 
     <hr>
-    <table class= "table table-bordered table-striped" > 
+    <table class= "table table-bordered table-striped"style="text-align:right" > 
       <thead> 
       <tr> 
         <th>#</th> 
-        <th>Nome Fantasia</th> 
-        <th>Sobrenome | Razão social</th> 
-        <th>RG | IE</th> 
-        <th>CPF | CNPJ</th> 
-        <th>Dt.Nascimento | Dt.Abertura</th> 
+        <th>Nome</th> 
+        <th>Sobrenome</th> 
+        <th>RG</th> 
+        <th>CPF</th> 
+        <th>Dt.Nascimento</th> 
         <th>Ações</th> 
       </tr> 
       </thead> 
@@ -32,11 +34,13 @@
       </tbody> 
     </table> 
   </div>
+
+<!--Produto-->
 <div class= "container border" > 
     <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Adicionar Produto</a>
 
     <hr>
-    <table class= "table table-bordered table-striped" > 
+    <table class= "table table-bordered table-striped"style="text-align:right" > 
       <thead> 
       <tr> 
         <th>#</th> 
@@ -49,6 +53,42 @@
       </tr> 
       </thead> 
       <tbody> 
+      <tr  *ngFor= "let produto of produtos" > 
+        <td ><span>{{produto.id_produto}}</span></td>
+        <td><span>{{produto.produto}}</span></td>
+        <td><span>{{produto.preco}}</span></td>
+        <td><span>{{produto.garantia}}</span></td>
+        <td ><span>{{produto.peso}}</span></td>
+        <td><span>{{produto.tamanho}}</span></td>
+        <td>
+          <!-- <a class="btn btn-info mx-1" href="#" role="button">Detalhes</a> -->
+          <a class="btn btn-warning mx-1" href="#" role="button" (click)="onEditProduto(content, produto.id)">Editar</a>
+          <a class="btn btn-primary mx-1" href="#" role="button" (click)="onViewProduto(contentView, produto.id)">Visualizar</a>
+          <a class="btn btn-danger mx-1" href="#" role="button" (click)="onRemoveProduto(produto.id)">Remover</a>
+        </td>
+      </tr> 
+      </tbody> 
+    </table> 
+  </div>
+
+<!--Funcionário-->
+<div class= "container border" > 
+    <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Cadastrar Funcionário</a>
+
+    <hr>
+    <table class= "table table-bordered table-striped"style="text-align:right" > 
+      <thead> 
+      <tr> 
+        <th>#</th> 
+        <th>Nome</th> 
+        <th>Comissão</th> 
+        <th>Idade</th> 
+        <th>Vendas no Mês</th> 
+        <th>Data de contratação</th> 
+        <th>Ações</th> 
+      </tr> 
+      </thead> 
+      <tbody> 
       <tr  *ngFor= "let cliente of clientes" > 
         <td ><span>{{cliente.id}}</span></td>
         <td><span>{{cliente.nome_nomefantasia}}</span></td>
@@ -67,8 +107,46 @@
     </table> 
   </div>
 
+<!--Venda-->
+<div class= "container border" > 
+    <a class="btn btn-success mt-sm-3" role="button" (click)="open(content)">Criar orçamento de venda</a>
 
-  <ng-template #content let-modal>
+    <hr>
+    <table class= "table table-bordered table-striped" style="text-align:right"> 
+      <thead > 
+      <tr> 
+        <th>#</th> 
+        <th>Vendedor</th> 
+        <th>Item</th> 
+        <th>Valor</th> 
+        <th>Quantidade</th> 
+        <th>Orçamento</th> 
+        <th>Ações</th> 
+      </tr> 
+      </thead> 
+      <tbody> 
+      <tr  *ngFor= "let cliente of clientes" > 
+        <td ><span>{{cliente.id}}</span></td>
+        <td><span>{{cliente.nome_nomefantasia}}</span></td>
+        <td><span>{{cliente.sobrenome_razaosocial}}</span></td>
+        <td><span>{{cliente.rg_ie}}</span></td>
+        <td ><span>{{cliente.cpf_cnpj}}</span></td>
+        <td><span>{{cliente.datanascimento_dataabertura}}</span></td>   
+                                          
+        <td>
+          <!-- <a class="btn btn-info mx-1" href="#" role="button">Detalhes</a> -->
+          <a class="btn btn-warning mx-1" href="#" role="button" (click)="onEditCliente(content, cliente.id)">Editar</a>
+          <a class="btn btn-primary mx-1" href="#" role="button" (click)="onViewCliente(contentView, cliente.id)">Visualizar</a>
+          <a class="btn btn-danger mx-1" href="#" role="button" (click)="onRemoveCliente(cliente.id)">Remover</a>
+        </td>
+      </tr> 
+      </tbody> 
+    </table> 
+  </div>
+
+
+
+<ng-template #content let-modal>
 
     <div class="modal-body p-4">
       <ul ngbNav #nav="ngbNav" class="nav-tabs" [destroyOnHide]="false">
@@ -255,42 +333,42 @@
           <a ngbNavLink>Informações Pessoais</a>
           <ng-template ngbNavContent>
             
-            <form name="clientForm" class="pt-3" #fCliente="ngForm" (ngSubmit)="onSubmit(fCliente.value)">
+            <form name="produtoForm" class="pt-3" #fProduto="ngForm" (ngSubmit)="onSubmit(fProduto.value)">
 
               <div class="row">
                 <div class="col-md-2 mb-2">
-                  <label for="formIdCliente" class="form-label">Id</label>
-                  <input id="formIdCliente" name="formIdCliente" class="form-control" ngModel disabled>
+                  <label for="formIdProduto" class="form-label">Id</label>
+                  <input id="formIdProduto" name="formIdProduto" class="form-control" ngModel disabled>
                 </div>
                 <div class="col-md-10 mb-2">
-                  <label for="formNomeCliente" class="form-label">Nome</label>
-                  <input #formNomeCliente="ngModel" id="formNomeCliente" name="formNomeCliente" class="form-control" ngModel disabled>
+                  <label for="formNomeProduto" class="form-label">Nome</label>
+                  <input #formNomeProduto="ngModel" id="formNomeProduto" name="formNomeProduto" class="form-control" ngModel disabled>
                 </div>
               </div>
 
                 <div class="form-group mb-2">
-                  <label for="formSobrenomeCliente">Sobrenome</label>
+                  <label for="formSobrenomeProduto">Sobrenome</label>
                   <div class="input-group">
-                    <input #formSobrenomeCliente="ngModel" id="formSobrenomeCliente" name="formSobrenomeCliente" class="form-control" ngModel disabled>
+                    <input #formSobrenomeProduto="ngModel" id="formSobrenomeProduto" name="formSobrenomeProduto" class="form-control" ngModel disabled>
                   </div>
                 </div>
 
                 <div class="row form-group">
                   <div class="col mb-2">
-                    <label for="formRgCliente" class="form-label">RG</label>
-                    <input mask="00.000.000-0"  #formRgCliente="ngModel" id="formRgCliente" name="formRgCliente" class="form-control" ngModel disabled>
+                    <label for="formRgProduto" class="form-label">RG</label>
+                    <input mask="00.000.000-0"  #formRgProduto="ngModel" id="formRgProduto" name="formRgProduto" class="form-control" ngModel disabled>
                   </div>
 
                   <div class="col mb-2">
-                    <label for="formCpfCliente" class="form-label">CPF</label>
-                    <input mask="000.000.000-00" #formCpfCliente="ngModel" id="formCpfCliente" name="formCpfCliente" class="form-control" ngModel disabled>
+                    <label for="formCpfProduto" class="form-label">CPF</label>
+                    <input mask="000.000.000-00" #formCpfProduto="ngModel" id="formCpfProduto" name="formCpfProduto" class="form-control" ngModel disabled>
                   </div>
                 </div>
       
                 <div class="row form-group">
                   <div class="col-md-5 mb-2">
-                    <label for="formDataCliente" class="form-label">Data de Nascimento</label>
-                    <input type="date" #formDataCliente="ngModel" id="formDataCliente" name="formDataCliente" class="form-control" ngModel disabled>
+                    <label for="formDataProduto" class="form-label">Data de Nascimento</label>
+                    <input type="date" #formDataProduto="ngModel" id="formDataProduto" name="formDataProduto" class="form-control" ngModel disabled>
                   </div>
                 </div>
               <div class="modal-footer mt-4">

@@ -1,3 +1,4 @@
+import { CurrencyPipe } from "@angular/common";
 import { EnderecoDto } from "./enderecoDto";
 
 export class ClienteDto {
@@ -63,6 +64,67 @@ export class ClienteDto {
             (dataToUpdate.cpf_cnpj.length == 0) ? currentData.cpf_cnpj : dataToUpdate.cpf_cnpj,
             (!dataToUpdate._datanascimento_dataabertura) ? currentData.datanascimento_dataabertura : dataToUpdate.datanascimento_dataabertura,
             []
+        );
+    }
+}
+
+
+export class ProdutoDto {
+    constructor(
+        private _id_produto: number,
+        private _produto: string,
+        private _preco: string,
+        private _garantia: string,
+        private _peso: string,
+        private _tamanho: string,
+    ) { }
+
+    
+    public get tamanho(): string {
+        return this._tamanho;
+    }
+    public set tamanho(value: string) {
+        this._tamanho = value;
+    }
+    public get peso(): string {
+        return this._peso;
+    }
+    public set peso(value: string) {
+        this._peso = value;
+    }
+    public get garantia(): string {
+        return this._garantia;
+    }
+    public set garantia(value: string) {
+        this._garantia = value;
+    }
+    public get preco(): string {
+        return this._preco;
+    }
+    public set preco(value: string) {
+        this._preco = value;
+    }
+    public get produto(): string {
+        return this._produto;
+    }
+    public set produto(value: string) {
+        this._produto = value;
+    }
+    public get idproduto(): number {
+        return this._id_produto;
+    }
+    public set idproduto(value: number) {
+        this._id_produto = value;
+    }
+
+    public static createProdutoToUpdate(dataToUpdate: ProdutoDto, currentData: ProdutoDto) {
+        return new ProdutoDto (
+            currentData.idproduto,
+            (dataToUpdate.produto.length == 0) ? currentData.produto : dataToUpdate.produto,
+            (dataToUpdate.preco.length == 0) ? currentData.preco : dataToUpdate.preco,
+            (dataToUpdate.garantia.length == 0) ? currentData.garantia : dataToUpdate.garantia,
+            (dataToUpdate.peso.length == 0) ? currentData.peso : dataToUpdate.peso,
+            (!dataToUpdate._tamanho) ? currentData.tamanho : dataToUpdate.tamanho,
         );
     }
 }
